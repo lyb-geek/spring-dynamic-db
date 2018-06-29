@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	
+	<context:component-scan base-package="com.demo.**.controller">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+
+
+	<mvc:annotation-driven />
+	
+	
+	
+	
+
+    <!-- 允许跨域请求 -->
+    <mvc:cors>
+        <mvc:mapping path="/**" allowed-origins="*" allow-credentials="true" max-age="1800" allowed-methods="GET,POST,OPTIONS,PUT,DELETE,HEAD"/>
+    </mvc:cors>
+
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/view/" />
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="freemarkerSettings">
+			<props>
+			    <!--刷新模板的周期，单位为秒--> 
+				<prop key="template_update_delay">10</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="number_format">#.##</prop>
+				 <!-- 此属性可以防止模板解析空值时的错误  --> 
+				<prop key="classic_compatible">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"></property>
+		<property name="suffix" value=".html" />
+		<property name="contentType" value="text/html;charset=utf-8" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="exposeSessionAttributes" value="true" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="requestContextAttribute" value="request" />
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="524288000" />
+	</bean>
+
+    <mvc:default-servlet-handler/>
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy> -->
+</beans>
